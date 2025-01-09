@@ -8,7 +8,7 @@ import os
 from keep_alive import keep_alive
 keep_alive()
 # insert your Telegram bot token here
-bot = telebot.TeleBot('7140094105:AAEcteoZXkxDKcv97XhGhkC-wokOUW-2a6k')
+bot = telebot.TeleBot('7819992909:AAHn51FAfPId42gmKUT5wPmCoyC4_g9OeN0')
 
 # Admin user IDs
 admin_id = ["1662672529"]
@@ -285,7 +285,7 @@ def start_attack_reply(message, target, port, time):
 # Dictionary to store the last time each user ran the /bgmi command
 bgmi_cooldown = {}
 
-COOLDOWN_TIME =0
+COOLDOWN_TIME =60
 
 # Handler for /bgmi command
 @bot.message_handler(commands=['bgmi'])
@@ -388,8 +388,8 @@ def welcome_rules(message):
     response = f'''{user_name} 𝒑𝒍𝒆𝒂𝒔𝒆 𝒇𝒐𝒍𝒍𝒐𝒘 𝒕𝒉𝒆 𝒓𝒖𝒍𝒆𝒔 ⚠️:
 
 1. 𝒅𝒐𝒏'𝒕 𝒓𝒖𝒏 𝒕𝒐𝒐 𝒎𝒂𝒏𝒚 𝒂𝒕𝒕𝒂𝒄𝒌 𝒕𝒐 𝒔𝒆𝒎 𝒊𝒑 𝒑𝒐𝒓𝒕 !! 𝒄𝒂𝒖𝒔𝒆 𝒂 𝒃𝒂𝒏 𝒂 𝒃𝒐𝒕.
-2. 𝒅𝒐𝒏'𝒕 𝒓𝒖𝒏 2 𝒂𝒕𝒕𝒂𝒄𝒌𝒔 𝒂𝒕𝒆 𝒔𝒂𝒎𝒆 𝒕𝒊𝒎𝒆 𝒃𝒆𝒄𝒛 𝒊𝒇 𝒖 𝒈𝒐𝒕 𝒃𝒂𝒏𝒏𝒆𝒅 𝒇𝒓𝒐𝒎 𝒃𝒐𝒕.
-3. 𝒘𝒆 𝒅𝒂𝒊𝒍𝒚 𝒄𝒉𝒆𝒄𝒌𝒔 𝒕𝒉𝒆 𝒍𝒐𝒈𝒔 𝒔𝒐 𝒇𝒍𝒐𝒐𝒘 𝒕𝒉𝒆𝒔𝒆 𝒓𝒖𝒍𝒆𝒔 𝒕𝒐 𝒂𝒗𝒐𝒊𝒅 𝒃𝒂𝒏.
+2. 𝒅𝒐𝒏'𝒕 𝒓𝒖𝒏 2 𝒂𝒕𝒕𝒂𝒄𝒌𝒔 𝒂𝒕 𝒔𝒂𝒎𝒆 𝒕𝒊𝒎𝒆 𝒃𝒆𝒄𝒛 𝒊𝒇 𝒖 𝒈𝒐𝒕 𝒃𝒂𝒏𝒏𝒆𝒅 𝒇𝒓𝒐𝒎 𝒃𝒐𝒕.
+3. 𝒘𝒆 𝒅𝒂𝒊𝒍𝒚 𝒄𝒉𝒆𝒄𝒌𝒔 𝒕𝒉𝒆 𝒍𝒐𝒈𝒔 𝒔𝒐 𝒇𝒐𝒍𝒍𝒐𝒘 𝒕𝒉𝒆𝒔𝒆 𝒓𝒖𝒍𝒆𝒔 𝒕𝒐 𝒂𝒗𝒐𝒊𝒅 𝒃𝒂𝒏.
 4. 𝒕𝒐 𝒎𝒂𝒌𝒆 𝒔𝒖𝒓𝒆 𝒚𝒐𝒖 𝒂𝒓𝒆 𝒋𝒐𝒊𝒏 𝒄𝒉𝒂𝒏𝒏𝒆𝒍:- https://t.me/+03wLVBPurPk2NWRl '''
     bot.reply_to(message, response)
 
