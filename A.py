@@ -8,7 +8,7 @@ import os
 from keep_alive import keep_alive
 keep_alive()
 # insert your Telegram bot token here
-bot = telebot.TeleBot('7140094105:AAEcteoZXkxDKcv97XhGhkC-wokOUW-2a6k')
+bot = telebot.TeleBot('7819992909:AAHn51FAfPId42gmKUT5wPmCoyC4_g9OeN0')
 
 # Admin user IDs
 admin_id = ["1662672529"]
@@ -283,24 +283,25 @@ def start_attack_reply(message, target, port, time):
     bot.reply_to(message, response)
 
 # Dictionary to store the last time each user ran the /bgmi command
+COOLDOWN_TIME = 60  # 1 minute cooldown period
+
 bgmi_cooldown = {}
 
-COOLDOWN_TIME =60
-
-# Handler for /bgmi command
 @bot.message_handler(commands=['bgmi'])
 def handle_bgmi(message):
     user_id = str(message.chat.id)
     if user_id in allowed_user_ids:
-        # Check if the user is in admin_id (admins have no cooldown)
         if user_id not in admin_id:
-            # Check if the user has run the command before and is still within the cooldown period
-            if user_id in bgmi_cooldown and (datetime.datetime.now() - bgmi_cooldown[user_id]).seconds < COOLDOWN_TIME:
-                response = "𝙮𝙤𝙪 𝙖𝙧𝙚 𝙘𝙤𝙤𝙡𝙙𝙤𝙬𝙣 ❌. 𝙬𝙖𝙞𝙩 𝙛𝙤𝙧 𝙨𝙚𝙘𝙤𝙣𝙙 𝙖𝙣𝙙 𝙪𝙨𝙚 /bgmi 𝙘𝙤𝙢𝙢𝙖𝙣𝙙 𝙖𝙜𝙖𝙞𝙣."
-                bot.reply_to(message, response)
-                return
-            # Update the last time the user ran the command
-            bgmi_cooldown[user_id] = datetime.datetime.now()
+            current_time = datetime.datetime.now()
+            if user_id in bgmi_cooldown:
+                cooldown_time = bgmi_cooldown[user_id]
+                time_diff = (current_time - cooldown_time).seconds
+                if time_diff < COOLDOWN_TIME:
+                    response = f"𝙮𝙤𝙪 𝙖𝙧𝙚 𝙘𝙤𝙤𝙡𝙙𝙤𝙬𝙣 ❌. 𝙬𝙖𝙞𝙩 𝙛𝙤𝙧 {COOLDOWN_TIME - time_diff} 𝙨𝙚𝙘𝙤𝙣𝙙 𝙖𝙣𝙙 𝙪𝙨𝙚 /bgmi 𝙘𝙤𝙢𝙢𝙖𝙣𝙙 𝙖𝙜𝙖𝙞𝙣."
+                    bot.reply_to(message, response)
+                    return
+            bgmi_cooldown[user_id] = current_time
+            # Rest of your code here
         
         command = message.text.split()
         if len(command) == 4:  # Updated to accept target, time, and port
