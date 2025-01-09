@@ -1,19 +1,27 @@
 
-
+import subprocess
+import json
 import telebot
 import json
+import string
 import subprocess
 import datetime
 import os
-
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 from keep_alive import keep_alive
+from telegram import ReplyKeyboardMarkup, KeyboardButton
 keep_alive()
 # insert your Telegram bot token here
 from config import BOT_TOKEN, ADMIN_IDS, OWNER_USERNAME
 
 USER_FILE = "users.json"
 KEY_FILE = "keys.json"
-
+flooding_process = None
+flooding_command = None
+DEFAULT_THREADS = 12000
+users = {}
+keys = {}
 # Function to read user IDs from the file
 def read_users():
     try:
