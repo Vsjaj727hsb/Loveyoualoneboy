@@ -1,0 +1,12 @@
+BOT_TOKEN=("7140094105:AAEcteoZXkxDKcv97XhGhkC-wokOUW-2a6k")
+
+OWNER_USERNAME=("@GODxAloneBOY")
+
+ADMIN_IDS=("1662672529")
+
+
+
+
+
+
+  

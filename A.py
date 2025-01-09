@@ -1,23 +1,20 @@
-
-
-import telebot
 import subprocess
-import datetime
+import json
 import os
-
-from keep_alive import keep_alive
-keep_alive()
-# insert your Telegram bot token here
-bot = telebot.TeleBot('7812610072:AAHwgSgA-7dXyIZvCVit48PS3Zc1z60nnA8')
-
-# Admin user IDs
-admin_id = ["1549748318"]
-
-# File to store allowed user IDs
-USER_FILE = "users.txt"
-
-# File to store command logs
-LOG_FILE = "log.txt"
+import random
+import string
+import datetime
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from config import BOT_TOKEN, ADMIN_IDS, OWNER_USERNAME
+from telegram import ReplyKeyboardMarkup, KeyboardButton
+USER_FILE = "users.json"
+KEY_FILE = "keys.json"
+flooding_process = None
+flooding_command = None
+DEFAULT_THREADS = 12000
+users = {}
+keys = {}
 
 # Function to read user IDs from the file
 def read_users():
@@ -279,7 +276,7 @@ def start_attack_reply(message, target, port, time):
     user_info = message.from_user
     username = user_info.username if user_info.username else user_info.first_name
     
-    response = f"{username}, 🅰︎🆃︎🆃︎🅰︎🅲︎🅺︎ 🅻︎🅰︎🆄︎🅽︎🅲︎🅷︎🅴︎🅳︎\n\n👙 🆃︎🅰︎🆁︎🅶︎🅴︎🆃︎: {target}\n⚙️ 🅿︎🅾︎🆁︎🆃︎: {port}\n⏳ 🆃︎🅸︎🅼︎🅴︎: {time} 🆂︎🅴︎🅲︎🅾︎🅽︎🅳︎🆂︎\n𝙟𝙤𝙞𝙣:- https://t.me/+sUHNz0xm_205MTBl"
+    response = f" 🅰︎🆃︎🆃︎🅰︎🅲︎🅺︎ 🅻︎🅰︎🆄︎🅽︎🅲︎🅷︎🅴︎🅳︎\n\n👙 🆃︎🅰︎🆁︎🅶︎🅴︎🆃︎: {target}\n⚙️ 🅿︎🅾︎🆁︎🆃︎: {port}\n⏳ 🆃︎🅸︎🅼︎🅴︎: {time} 🆂︎🅴︎🅲︎🅾︎🅽︎🅳︎🆂︎\n𝙟𝙤𝙞𝙣:- https://t.me/+sUHNz0xm_205MTBl"
     bot.reply_to(message, response)
 
 # Dictionary to store the last time each user ran the /bgmi command
@@ -372,7 +369,10 @@ Official Channel :- https://t.me/+sUHNz0xm_205MTBl
 @bot.message_handler(commands=['start'])
 def welcome_start(message):
     user_name = message.from_user.first_name
-    response = f'''▼ 🆆︎🅴︎🅻︎🅲︎🅾︎🅼︎🅴︎ 🆃︎🅾︎ 🅿︎🆁︎🅴︎🅼︎🅸︎🆄︎🅼︎ 🅳︎🅳︎🅾︎🆂︎ ▼, {user_name}!
+    response = f'''▼ 🆆︎🅴︎🅻︎🅲︎🅾︎🅼︎🅴︎ 🆃︎🅾︎ 🅿︎🆁︎🅴︎🅼︎🅸︎🆄︎🅼︎ 🅳︎🅳︎🅾︎🆂︎ ▼,
+    
+      {user_name}! $$$$$$$$$$$$$
+    
     
  ⠛⠛⣿⣿⣿⣿⣿⡷⢶⣦⣶⣶⣤⣤⣤⣀⠀⠀⠀
  ⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀
@@ -394,26 +394,28 @@ def welcome_start(message):
 @bot.message_handler(commands=['rules'])
 def welcome_rules(message):
     user_name = message.from_user.first_name
-    response = f'''{user_name} Please Follow These Rules ⚠️:
+    response = f'''{user_name} 𝙛𝙤𝙡𝙡𝙤𝙬 𝙩𝙝𝙚 𝙧𝙪𝙡𝙨 ⚠️:
 
-1. Dont Run Too Many Attacks !! Cause A Ban From Bot
-2. Dont Run 2 Attacks At Same Time Becz If U Then U Got Banned From Bot.
-3. MAKE SURE YOU JOINED https://t.me/+sUHNz0xm_205MTBl OTHERWISE NOT WORK
-4. We Daily Checks The Logs So Follow these rules to avoid Ban!!'''
+ ⠀⠀⠀⠀██████ ]▄▄▄▄▄▄▄
+▂▅████████▅▃▂   ☻
+Il████████████]. / ▌\╦─  
+@@@@@@@@@@@@@@    /  \
+
+𝙟𝙤𝙞𝙣 𝙢𝙮 𝙘𝙝𝙖𝙣𝙣𝙚𝙡 :-https://t.me/+sUHNz0xm_205MTBl '''
     bot.reply_to(message, response)
 
 @bot.message_handler(commands=['plan'])
 def welcome_plan(message):
     user_name = message.from_user.first_name
-    response = f'''{user_name}, 🄳🄳🄾🅂 🄿🅁🄸🄲🄴 🄻🄸🅂🅃 
+    response = f'''{user_name},
+    
+╔═══════════╗
+║██░░░░░░░░░ ╚╗
+║██░ 𝒂𝒑𝒑𝒓𝒐𝒗𝒆𝒍 𝒕𝒊𝒎𝒆 𝒍𝒐𝒘░║
+║██░░░░░░░░░ ╔╝
+╚═══════════╝
 
-🄿🅁🄸🄲🄴:
-
-1 ༒︎🅓︎🅐︎🅨︎       $ 100  
-3 ༒︎🅓︎🅐︎🅨︎🅢︎    $ 250
-7 ༒︎🅓︎🅐︎🅨︎🅢︎    $ 450
-
-'''
+𝙙𝙢 𝙤𝙬𝙣𝙚𝙧 𝙩𝙤 𝙛𝙪𝙡𝙡 𝙖𝙥𝙧𝙧𝙤𝙫𝙚𝙡 𝙩𝙞𝙢𝙚 𝙘𝙝𝙖𝙧𝙜𝙚 :- @RAJOWNER90'''
     bot.reply_to(message, response)
 
 @bot.message_handler(commands=['admincmd'])
@@ -421,13 +423,13 @@ def welcome_plan(message):
     user_name = message.from_user.first_name
     response = f'''{user_name}, Admin Commands Are Here!!:
 
-💥 /add <userId> : Add a User.
-💥 /remove <userid> Remove a User.
-💥 /allusers : Authorised Users Lists.
-💥 /logs : All Users Logs.
-💥 /broadcast : Broadcast a Message.
-💥 /clearlogs : Clear The Logs File.
-💥 /clearusers : Clear The USERS File.
+💥 /add <userId> : 𝒂𝒅𝒅 𝒂 𝒖𝒔𝒆𝒓.
+💥 /remove <userid> 𝒓𝒆𝒎𝒐𝒗𝒆𝒂 𝒖𝒔𝒆𝒓.
+💥 /allusers :  𝒂𝒖𝒕𝒉𝒐𝒓𝒊𝒛𝒆𝒅 𝒖𝒔𝒆𝒓 𝒍𝒊𝒔𝒕.
+💥 /logs :      𝒂𝒍𝒍 𝒖𝒔𝒆𝒓 𝒍𝒐𝒈𝒔.
+💥 /broadcast : 𝒃𝒓𝒐𝒅𝒄𝒂𝒔𝒕 𝒎𝒆𝒔𝒔𝒂𝒈𝒆 𝒂𝒍𝒍 𝒖𝒔𝒆𝒓.
+💥 /clearlogs : 𝒄𝒍𝒆𝒂𝒓 𝒕𝒉𝒆 𝒍𝒐𝒈𝒔 .
+💥 /clearusers : 𝒄𝒍𝒆𝒂𝒓 𝒕𝒉𝒆 𝒖𝒔𝒆𝒓𝒔 𝒇𝒊𝒍𝒆.
 '''
     bot.reply_to(message, response)
 
